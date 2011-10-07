@@ -1,0 +1,1 @@
+# Authentication (keckmeen)AuthType BasicAuthName "Bro Storage System"AuthUserFile /users/bizzyanton/www/.htpasswdrequire valid-user# Enable viewing of files/subfolders in all foldersOptions +Indexes
