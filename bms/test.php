@@ -5,9 +5,9 @@
 <?php
 	
 	if (isset($_SESSION['clicks'])) {
-		$_SESSION['clicks'] = $_SESSION['clicks'] + 1;
+		$Session.mod('clicks', function($clicks) { return $clicks + 1 } );
 	} else {
-		$_SESSION['clicks'] = 0;
+		$Session.put('clicks', 0);
 	}
 	
 	echo "Click-count: {$_SESSION['clicks']}";
