@@ -1,14 +1,13 @@
 
 <?
 
-class A {
-	
-	static function __callStatic($key, $args) {
-		return 123;
-	}
-	
+function testf() { return $aaa; }
+
+function testff() {
+	$aaa = 123;
+	return testf();
 }
 
-var_dump(A::a());
+var_dump(testff());
 
 ?>

@@ -1,4 +1,4 @@
-<? require('./php/sessions.php'); ?>
+<? require('./php/session.php'); ?>
 
 <html>
 	<head>

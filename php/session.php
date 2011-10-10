@@ -95,4 +95,18 @@ class SessionValue {
 
 $Session = Session::instance();
 
+// Example of using this Session-API
+/*
+	$clicks = $Session->clicks;
+	if ($clicks->is_set()) {
+		$clicks(function($clicks) { return $clicks + 1; });
+		// Alternative here: $Session->clicks(function ...);
+	} else {
+		$clicks(0);
+	}
+	
+	echo "Click-count: {$clicks()}";
+	echo "<br/><a href='", session_link('/bms/test.php'), "'>Click here</a>";
+*/
+
 ?>
