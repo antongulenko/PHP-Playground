@@ -10,9 +10,9 @@
 	<? } ?>
 	
 	<form action="perform_login" method="GET">
-		<p>Username: <input required type="text" name="username"/></p>
-		<p>Passwort: <input required type="password" name="password"/></p>
-		<p><input type="submit" value="Login"/></p>
+		<p>Username: <input tabindex=1 required type="text" name="username"/></p>
+		<p>Passwort: <input tabindex=2 required type="password" name="password"/></p>
+		<p><input type="submit" tabindex=3 value="Login"/></p>
 	</form>
 	
 	<? if ($render_error) { ?></div><? } ?>
