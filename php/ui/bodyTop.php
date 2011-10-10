@@ -9,11 +9,13 @@
 	</head>
 	<body>
 		<div id="header">
-			<h1>Jo, welcome at bros'r'us!!</h1>
-			<div id="loginStatus"><? include 'loggedInHeader.php' ?></div>
+			<div id="header-content">
+				<h1>Jo, welcome at bros'r'us!!</h1>
+				<div id="loginStatus"><? include 'loggedInHeader.php' ?></div>
+			</div>
 		</div>
-		<div id="header">
-			<div id="loginStatus"><? include 'loggedInHeader.php' ?></div>
+		<div id="menu">
+			<? include 'menu.php' ?>
 		</div>
 		
 		<div id="main">

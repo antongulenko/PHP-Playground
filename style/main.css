@@ -1,20 +1,94 @@
 body {
-	background-image:url('background_smaller.png');
-	background-repeat:no-repeat;
-	background-position:right top;
-	background-attachment:scroll;
 	padding: 0;
 	margin: 0;
 	background-color: #ddf5f5ff;
-	padding-bottom: 5px;
 	overflow: hidden;
 	height: 100%;
 }
-#header {
-	margin: 0 0 10px;
-	background-color: #ff0;
-	height: 8%;
+#main {
+	padding: 100px;
+	clear: both;
+	margin-left: auto;
+	margin-right: auto;
+	width: 70%;
+	height: 85%;
+	padding: 0;
+	overflow: hidden;
+	border-style: none solid;
 }
+
+/* Header */
+
+#header {
+	height: 60px;
+}
+#header-content {
+	width: 70%;
+	margin-left: auto;
+	margin-right: auto;
+	height: auto;
+}
+#header h1 {
+	float: left;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+#loginStatus {
+	float: right;
+	margin-top: 37px;
+	background-color: #ffc6;
+}
+
+/* Menu */
+
+#menu {
+	margin: 0 0 10px;
+	height: 50px;
+}
+#menu a {
+	float: left;
+	padding: 0 10px;
+	cursor: pointer;
+	border-style: none solid solid;
+}
+#menu a:link {
+	text-decoration: none;
+	color: black;
+}
+#menu a:visited {
+	text-decoration: none;
+	color: black;
+}
+#menu a:active{
+	text-decoration: none;
+	color: black;
+}
+#menu a:hover{
+	text-decoration: none;
+	background-color: E8E0CA;
+	color: black;
+}
+#menu a.selected {
+	background-color: CCC3A9;
+}
+#menu a * {
+	margin: 10px 0;
+}
+
+/* The common border */
+
+#menu a, #header {
+	border-style: none solid solid;
+	border-bottom-left-radius: 40px;
+	border-bottom-right-radius: 40px;
+}
+#menu a, #header, #main {
+	border-color: BDB9AE;
+	border-width: 7px;
+}
+
+/* Footer */
+
 #footer {
 	clear: both;
 	height: auto;
@@ -24,23 +98,4 @@ body {
 #footer * {
 	margin: 0 10px 0;
 	float: right;
-}
-#main {
-	clear: both;
-	margin-left: auto;
-	margin-right: auto;
-	width: 70%;
-	height: 85%;
-	padding: 0;
-	overflow: hidden;
-}
-
-#loginStatus {
-	float: right;
-	margin-top: auto;
-	margin-bottom: auto;
-	margin-right: 10px;
-	margin-left: 10px;
-	height: 100%;
-	background-color: #ffc6;
 }

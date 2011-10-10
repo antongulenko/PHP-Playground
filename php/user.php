@@ -1,6 +1,6 @@
 <?
-require_once 'session.php';
-require_once 'orm.php';
+require_once 'php/session.php';
+require_once 'php/orm.php';
 
 // If the credentials are correct, login the user and return true. Else, return false.
 function login($user, $password) {
@@ -23,7 +23,7 @@ function isLoggedIn() {
 }
 
 function userObject($user, $password) {
-	return R::findOne('user', 'name is ? AND password is ?', array($user, hash_password($password)));
+	return R::findOne('user', 'name = ? AND password = ?', array($user, hash_password($password)));
 }
 
 function hash_password($pw) {

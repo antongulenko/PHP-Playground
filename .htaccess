@@ -6,6 +6,9 @@ Allow from all
 # No indexes anywhere
 Options -Indexes 
 
+# If we deploy on localhost, set additional flag, that is read by PHP via apache_get()
+SetEnvIf Host localhost is_local_deploy
+
 RewriteEngine on
 RewriteBase /
 

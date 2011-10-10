@@ -1,17 +1,18 @@
 <?
 
-// This scripts sets up the database connection and the orm
+// This script sets up the database connection and the orm
 
 // We use the RedBean PHP ORM
-require_once 'RedBeanPHP2_1_1/rb.php';
+require_once 'php/RedBeanPHP2_1_1/rb.php';
 
 // Transparently use the local configuration, if present
-$localIni = '../htdocs_conf/mysql_local.ini';
-if (file_exists($localIni)) {
-	$conf = parse_ini_file($localIni);
+if (function_exists('apache_getenv') && apache_getenv('is_local_deploy', true) == "1") {
+	$iniFile = '../htdocs_conf/mysql_local.ini';
 } else {
-	$conf = parse_ini_file('conf/mysql.ini');
+	$iniFile = 'conf/mysql.ini';
 }
+$conf = parse_ini_file($iniFile);
+
 R::setup('mysql:host='. $conf['host']. ';dbname='. $conf['database']. '', $conf['user'], $conf['password']);
 R::freeze(false); // If we're done developing, turn this to false. Stops changing the schema.
 R::debug(false); // Turn on to show all queries on the screen
@@ -20,7 +21,7 @@ R::debug(false); // Turn on to show all queries on the screen
 // API: http://www.redbeanphp.com/api/
 
 /*
- * Excerpt of RedBen-ORM-API
+ * Excerpt of RedBean-ORM-API
  * 
  * R::dispense('book') // create
  * list($first, $second, ...) = R::dispense('book', 10) // create (multiple)
