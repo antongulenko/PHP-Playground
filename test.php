@@ -1,9 +1,14 @@
 
 <?
 
-require('php/sessions.php');
+class A {
+	
+	static function __callStatic($key, $args) {
+		return 123;
+	}
+	
+}
 
-$uri = 'bc.de/wd';
-var_dump(session_link($uri));
+var_dump(A::a());
 
 ?>
