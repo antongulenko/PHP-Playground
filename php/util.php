@@ -1,4 +1,4 @@
-<?php
+<?
 
 # better version than built in, from http://php.net/manual/de/ref.strings.php
 function beginsWith($str, $sub) {

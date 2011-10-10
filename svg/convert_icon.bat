@@ -1,0 +1,1 @@
+png2ico ..\favicon.ico icon.png

@@ -1,5 +1,5 @@
-<?php
-require('util.php');
+<?
+require_once 'util.php';
 
 session_cache_expire(60 * 5); // 5 minutes
 session_start();

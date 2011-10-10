@@ -11,6 +11,7 @@ RewriteBase /
 
 # Rewrite-rules used to forbid hidden folders. error-pages cannot be forbidden, causes internal server error
 RewriteRule ^php/(.*)$ - [F]
+RewriteRule ^conf/(.*)$ - [F]
 
 # Some of these might be ignored
 ErrorDocument 400 /error-pages/400.php
