@@ -12,11 +12,24 @@ RewriteBase /
 # Rewrite-rules used to forbid hidden folders. error-pages cannot be forbidden, causes internal server error
 RewriteRule ^php/(.*)$ - [F]
 RewriteRule ^conf/(.*)$ - [F]
+RewriteRule ^svg/(.*)$ - [F]
+
+# Redirect from .php sites to the page without .php. THE_REQUEST to avoid infinite loop
+RewriteCond %{THE_REQUEST} ^GET\ (.*)\.php\ HTTP
+RewriteRule (.*)\.php$ $1 [R=301]
+
+# remove index
+RewriteRule (.*)/index$ $1/ [R=301]
+
+# add .php to access file, but don't redirect
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteCond %{REQUEST_URI} !/$
+RewriteRule (.*) $1\.php [L]
 
 # Some of these might be ignored
-ErrorDocument 400 /error-pages/400.php
-ErrorDocument 401 /error-pages/401.php
-ErrorDocument 402 /error-pages/402.php
-ErrorDocument 403 /error-pages/403.php
-ErrorDocument 404 /error-pages/404.php
-ErrorDocument 500 /error-pages/500.php
+ErrorDocument 400 /err/400.php
+ErrorDocument 401 /err/401.php
+ErrorDocument 402 /err/402.php
+ErrorDocument 403 /err/403.php
+ErrorDocument 404 /err/404.php
+ErrorDocument 500 /err/500.php

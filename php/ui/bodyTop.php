@@ -2,13 +2,21 @@
 
 <html>
 	<head>
-		<title>Bros'r'Us</title>
-		<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+		<title>Bros ' r ' Us</title>
+		<link rel="shortcut icon" type="image/x-icon" href="/favicon_big.ico">
+		
+		<link href="style/main.css" rel="stylesheet" type="text/css">
 	</head>
 	<body>
-		<script src="http://www.domains-geschenkt.de/verify-66884.js" type="text/javascript"></script><a href="http://www.domains-geschenkt.de/" target="_blank" title="Gratis Domain">Gratis Domain</a>
+		<div id="header">
+			<h1>Jo, welcome at bros'r'us!!</h1>
+			<div id="loginStatus"><? include 'loggedInHeader.php' ?></div>
+		</div>
+		<div id="header">
+			<div id="loginStatus"><? include 'loggedInHeader.php' ?></div>
+		</div>
 		
-		<? include 'loggedInHeader.php' ?>
-
+		<div id="main">
+		
 <? // Here comes the website content... ?>
 <? // bodyBottom.php is included at the end ?>

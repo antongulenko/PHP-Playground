@@ -1,0 +1,46 @@
+body {
+	background-image:url('background_smaller.png');
+	background-repeat:no-repeat;
+	background-position:right top;
+	background-attachment:scroll;
+	padding: 0;
+	margin: 0;
+	background-color: #ddf5f5ff;
+	padding-bottom: 5px;
+	overflow: hidden;
+	height: 100%;
+}
+#header {
+	margin: 0 0 10px;
+	background-color: #ff0;
+	height: 8%;
+}
+#footer {
+	clear: both;
+	height: auto;
+	margin: 0 0 10px;
+	height: 3%;
+}
+#footer * {
+	margin: 0 10px 0;
+	float: right;
+}
+#main {
+	clear: both;
+	margin-left: auto;
+	margin-right: auto;
+	width: 70%;
+	height: 85%;
+	padding: 0;
+	overflow: hidden;
+}
+
+#loginStatus {
+	float: right;
+	margin-top: auto;
+	margin-bottom: auto;
+	margin-right: 10px;
+	margin-left: 10px;
+	height: 100%;
+	background-color: #ffc6;
+}
