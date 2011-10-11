@@ -1,10 +1,10 @@
 <?
 require 'php/ui/bodyTop.php';
 require_once 'php/user.php';
-
-assertLoggedIn();
+assertLoggedOut();
 ?>
 
-<h1>Hello, the forum will appear here soon!</h1>
+You have been registered!
+An admin will activate your account soon.
 
 <? require 'php/ui/bodyBottom.php' ?>

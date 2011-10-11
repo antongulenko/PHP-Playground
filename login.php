@@ -1,22 +1,18 @@
-<? require 'php/ui/bodyTop.php' ?>
+<?
+require 'php/ui/bodyTop.php';
+require_once 'php/user.php';
+require_once 'php/ui/util.php';
+assertLoggedOut();
 
-<div id="login-panel">
-	
-	<? 
-	$render_error = isset($_REQUEST['failed']);
-	if ($render_error) { ?>
-		<div class="error-box">
-		<span>You failed!</span>
-	<? } ?>
-	
-	<form action="perform_login" method="GET">
-		<p>Username: <input tabindex=1 required type="text" name="username"/></p>
-		<p>Passwort: <input tabindex=2 required type="password" name="password"/></p>
-		<p><input type="submit" tabindex=3 value="Login"/></p>
-	</form>
-	
-	<? if ($render_error) { ?></div><? } ?>
-	
-</div>
+openBox(array(
+	'failed' => 'Login failed, wrong username or password.',
+	'notActivated' => 'Your account has not yet been activated.'
+));
+simpleForm(array(
+	array('text', 'Username:', 'username'),
+	array('password', 'Passwort:', 'password'),
+	array('submit', 'Login', ''),
+), 'GET', 'perform_login');
+closeBox();
 
-<? require 'php/ui/bodyBottom.php' ?>
+require 'php/ui/bodyBottom.php' ?>

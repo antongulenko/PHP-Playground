@@ -1,25 +1,46 @@
 body {
 	padding: 0;
 	margin: 0;
-	background-color: #ddf5f5ff;
+	background-color: FCF9F7;
 	overflow: hidden;
 	height: 100%;
 }
-#main {
-	padding: 100px;
+#main-container {
+	position: relative;
+	top: -75px;
+	z-index: 0;
 	clear: both;
 	margin-left: auto;
 	margin-right: auto;
 	width: 70%;
-	height: 85%;
+	height: 100%;
 	padding: 0;
 	overflow: hidden;
 	border-style: none solid;
 }
+#main {
+	height: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	top: 75px;
+	width: 80%;
+}
+#main-container, #header {
+	background-color: F2EAE6;
+}
 
 /* Header */
 
+#logo {
+	float: left;
+	height: 100px;
+	margin-right: 10px;
+	margin-left: 10px;
+}
 #header {
+	position: relative;
+	z-index: 1;
 	height: 60px;
 }
 #header-content {
@@ -29,19 +50,44 @@ body {
 	height: auto;
 }
 #header h1 {
+	position: relative;
+	top: -7px;
 	float: left;
-	margin-top: 20px;
-	margin-bottom: 20px;
 }
 #loginStatus {
 	float: right;
-	margin-top: 37px;
+	position: relative;
+	top: 30px;
 	background-color: #ffc6;
+}
+
+/* Fonts */
+
+* {
+	color: 524D47;
+}
+#loginStatus *, #header h1  {
+	font-family: "trebuchet ms";
+}
+#menu * {
+	font-family: "palatino";
+	font-weight: bold;
+	font-size: medium;
+}
+#main * {
+	font-family: "helvetica";
+}
+#loginStatus * {
+	font-style: oblique;
 }
 
 /* Menu */
 
 #menu {
+	text-align: center;
+	position: relative;
+	left: -100;
+	z-index: 2;
 	margin: 0 0 10px;
 	height: 50px;
 }
@@ -53,22 +99,18 @@ body {
 }
 #menu a:link {
 	text-decoration: none;
-	color: black;
 }
 #menu a:visited {
 	text-decoration: none;
-	color: black;
 }
 #menu a:active{
 	text-decoration: none;
-	color: black;
 }
 #menu a:hover{
 	text-decoration: none;
 	background-color: E8E0CA;
-	color: black;
 }
-#menu a.selected {
+#menu a.selected, .content-box {
 	background-color: CCC3A9;
 }
 #menu a * {
@@ -82,8 +124,10 @@ body {
 	border-bottom-left-radius: 40px;
 	border-bottom-right-radius: 40px;
 }
-#menu a, #header, #main {
+#menu a, #header, #main-container, .content-box {
 	border-color: BDB9AE;
+}
+#menu a, #header, #main-container {
 	border-width: 7px;
 }
 
@@ -98,4 +142,40 @@ body {
 #footer * {
 	margin: 0 10px 0;
 	float: right;
+}
+
+/* Panels, boxes */
+
+.box-container{
+	width: 100%;
+	text-align: left;
+}
+.error-box , .content-box {
+	padding: 30px;
+	border-style: solid;
+	border-width: 2px;
+}
+.error-box  {
+	border-color: E85A5A;
+	background-color: FAD2D2;
+}
+.error-box span {
+	position: relative;
+	left: 168px;
+	top: -12px;
+	font-size: large;
+	font-weight: bold;
+	color: E85A5A;
+}
+
+.simple_form  {
+	width: 50%;
+	margin-left: auto;
+	margin-right: auto;
+}
+.simple_form label {
+	width: 170px;
+}
+.simple_form  input, .simple_form label {
+	float: left;
 }

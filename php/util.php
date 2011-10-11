@@ -12,6 +12,22 @@ function isExternalLink($link) {
 		beginsWith($link, 'ftp://');
 }
 
+// Check, whether array contains only numbers as keys
+function isNumbered($array) {
+    return array_keys($array) === range(0, count($array) - 1);
+}
+
+function firstExistingParameter($keys) {
+	$result = null;
+	foreach ($keys as $key) {
+		if (isset($_REQUEST[$key])) {
+			$result = $key;
+			break;
+		}
+	}
+	return $result;
+}
+
 // Try to get the url, that has been invoked.
 // mod_rewrite passes the original path into the original_accessed variable;
 // if it's absent, take the name of the script.

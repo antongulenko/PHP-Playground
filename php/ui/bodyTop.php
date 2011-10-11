@@ -10,7 +10,8 @@
 	<body>
 		<div id="header">
 			<div id="header-content">
-				<h1>Jo, welcome at bros'r'us!!</h1>
+				<img id="logo" src="style/background.png" alt="(Logo)" />
+				<h1>Hallo, Leute!</h1>
 				<div id="loginStatus"><? include 'loggedInHeader.php' ?></div>
 			</div>
 		</div>
@@ -18,6 +19,7 @@
 			<? include 'menu.php' ?>
 		</div>
 		
+		<div id="main-container">
 		<div id="main">
 		
 <? // Here comes the website content... ?>

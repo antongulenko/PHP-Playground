@@ -7,6 +7,6 @@ if (isLoggedIn()) {
 	<span>Hello, <?php echo $user->name ?></span><br/>
 	<span>Last login: <?php echo $user->lastLogin ?></span><?php
 } else { ?>
-	<span>You are currently not logged in.</span><?php
+	<span>Du bist nicht eingeloggt.</span><?php
 }
 ?>
