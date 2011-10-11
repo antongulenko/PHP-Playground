@@ -12,6 +12,10 @@ function isExternalLink($link) {
 		beginsWith($link, 'ftp://');
 }
 
+function ip() {
+	return $_SERVER['REMOTE_ADDR'];
+}
+
 // Check, whether array contains only numbers as keys
 function isNumbered($array) {
     return array_keys($array) === range(0, count($array) - 1);

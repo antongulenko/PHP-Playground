@@ -15,4 +15,5 @@ simpleForm(array(
 ), 'GET', 'perform_login');
 closeBox();
 
-require 'php/ui/bodyBottom.php' ?>
+require 'php/ui/bodyBottom.php'
+?>

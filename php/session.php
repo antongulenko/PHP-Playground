@@ -94,6 +94,11 @@ class SessionValue {
 }
 
 $Session = Session::instance();
+// Function to avoid using the global-keywork everywhere
+function session() {
+	global $Session;
+	return $Session;
+}
 
 // Example of using this Session-API
 /*

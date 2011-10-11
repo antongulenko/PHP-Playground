@@ -1,4 +1,4 @@
-<? 
+<?
 require_once 'php/user.php';
 require_once 'php/util.php';
 assertLoggedOut();
@@ -9,7 +9,9 @@ $registrationStatusRedirects = array(
 	'passwords' => 'register?passwordsDontMatch'
 );
 
-list($username, $password, $password2) = assert_query_data(array('username', 'password', 'password2'));
-redirect($registrationStatusRedirects[createUser($username, $password, $password2)]);
+list($username, $password, $password2) = assert_query_data(array('username', 'password1', 'password2'));
+$res = $registrationStatusRedirects[createUser($username, $password, $password2)];
+
+redirect($res);
 
 ?>

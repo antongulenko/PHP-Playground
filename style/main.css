@@ -57,8 +57,7 @@ body {
 #loginStatus {
 	float: right;
 	position: relative;
-	top: 30px;
-	background-color: #ffc6;
+	top: 15px;
 }
 
 /* Fonts */

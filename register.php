@@ -16,4 +16,5 @@ simpleForm(array(
 ), 'GET', 'perform_registration');
 closeBox();
 
-require 'php/ui/bodyBottom.php' ?>
+require 'php/ui/bodyBottom.php'
+?>
