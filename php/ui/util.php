@@ -1,6 +1,26 @@
 <?
 require_once 'php/util.php';
 
+function menu_element($text, $link, $isSelected) { 
+	?><a <? 
+	if ($isSelected) { ?>class="selected" <? } ?>
+	href="<? echo session_link($link) ?>"><? echo $text ?></a><?
+}
+
+function includeJs($scriptNameS) {
+	if (!is_array($scriptNameS)) $scriptNameS = array($scriptNameS);
+	foreach ($scriptNameS as $scriptName) {
+		?><script type="text/javascript" language="javascript" src="<? echo $scriptName ?>"></script><?
+	}
+}
+
+function includeCss($cssScriptS) {
+	if (!is_array($cssScriptS)) $cssScriptS = array($cssScriptS);
+	foreach ($cssScriptS as $cssScript) {
+		?><link href="<? echo $cssScript ?>" rel="stylesheet" type="text/css"><?
+	}
+}
+
 // $error_messages can contain key-value-string or just strings.
 // If a string (key) exists as parameter, an error-box will be rendered.
 // The error-message is the value in the array (if it contains values) or the value of the request-parameter.
@@ -44,6 +64,22 @@ function simpleForm($specs, $method, $action) {
 	?>
 	</form>
 	<?
+}
+
+function namedTableRow($dataArray, $cellType) {
+	?><tr><?
+	foreach ($dataArray as $cell) {
+		?><<? echo $cellType ?>><? echo $cell ?></<? echo $cellType ?>><?
+	}
+	?></tr><?
+}
+
+function tableHeaderRow($dataArray) {
+	namedTableRow($dataArray, 'th');
+}
+
+function tableRow($dataArray) {
+	namedTableRow($dataArray, 'td');
 }
 
 ?>

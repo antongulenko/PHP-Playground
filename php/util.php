@@ -90,4 +90,14 @@ function assert_query_data($data_keys) {
 	return $result;
 }
 
+function hasExactlyKeys($array, $requiredKeys) {
+	$intersect = array_intersect(array_keys($array), $requiredKeys);
+	$diff = array_diff($intersect, $requiredKeys);
+	return empty($diff);
+}
+
+function implies($bool1, $bool2) {
+	return !$bool1 || $bool2;
+}
+
 ?>

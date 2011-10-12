@@ -1,0 +1,13 @@
+
+admin-user-management:
+- delete-link
+- reset-password-link
+account-management:
+- change password
+- delete account
+
+Forum integrieren
+Tracker integrieren
+
+(Guter text für startseite)
+(notiz hinterlassen beim account erstellen)

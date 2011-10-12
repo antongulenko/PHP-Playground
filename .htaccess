@@ -16,6 +16,7 @@ RewriteBase /
 RewriteRule ^php/(.*)$ - [F]
 RewriteRule ^conf/(.*)$ - [F]
 RewriteRule ^svg/(.*)$ - [F]
+RewriteRule ^todo.txt$ - [F]
 
 # Redirect from .php sites to the page without .php. THE_REQUEST to avoid infinite loop
 RewriteCond %{THE_REQUEST} ^GET\ (.*)\.php\ HTTP

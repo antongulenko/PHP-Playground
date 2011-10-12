@@ -7,6 +7,8 @@ assertLoggedOut();
 openBox(array(
 	'usernameExists' => 'The chosen username already exists',
 	'passwordsDontMatch' => 'The passwords don\'t match',
+	'empty' => 'Bitte fülle alle Felder aus',
+	'illegalUsername' => 'Im Usernamen sind nur alphanumerische Zeichen und _ erlaubt'
 ));
 simpleForm(array(
 	array('text', 'Username:', 'username'),

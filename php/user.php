@@ -25,7 +25,7 @@ function login($user, $password) {
 	if (!$user->isActivated) return 'notActivated';
 	session()->isLoggedIn = true;
 	$user->lastLogin = $user->currentLogin;
-	$user->currentLogin = date('l, d.m.Y H:i:s');
+	$user->currentLogin = date('d.m.Y H:i:s (l)');
 	R::store($user);
 	$db_session = currentDatabaseSession(); // Just to make sure, look it up. Should not exist.
 	if ($db_session === false) {
@@ -57,6 +57,10 @@ function logout() {
 	deleteDatabaseSession();
 	unset(session()->isLoggedIn);
 	$loggedInUser = null;
+}
+
+function allUSers() {
+	return R::find('user');
 }
 
 // Dangerous function for the first user in the system :)
@@ -107,6 +111,9 @@ function findUser($username, $password = null) {
 // Return a string-status depiciting the success of the registration
 function createUser($username, $password, $password2) {
 	if ($password != $password2) return 'passwords';
+	if (empty($password) && empty($username)) return 'empty';
+	preg_match('/^([A-Za-z0-9]|_)*$/',$username, $matches);
+	if (empty($matches)) return 'illegalUsername';
 	$existingUser = findUser($username, $password);
 	if ($existingUser !== false) return 'usernameExists';
 	$user = R::dispense('user');
@@ -119,8 +126,51 @@ function createUser($username, $password, $password2) {
 	return 'ok';
 }
 
+// This contains the flags of user-data and whether root is required to change it.
+$user_flags = array(
+	'isRoot' => true,
+	'isAdmin' => true,
+	'isActivated' => false
+);
+
+// Update changeable settings of the specified user. Return success state.
+// Only handles boolean attributes (flags)
+function updateUserFlags($username, $newData) {
+	global $user_flags;
+	$db_user = findUser($username);
+	if ($db_user !== false) {
+		foreach (array_keys($user_flags) as $attribute) {
+			if (hasRightToChange($attribute, $db_user)) {
+				$newValue = array_key_exists($attribute, $newData) && $newData[$attribute] === true;
+				if ($db_user->$attribute !== $newValue)
+					// Only set changed attributes... Dunno, how the orm reacts.
+					$db_user->$attribute = $newValue;
+			}
+		}
+		// Make adjustments to keep the flags consistent and logical
+		if ($db_user->isRoot && !$db_user->isAdmin) {
+			$db_user->isAdmin = true;
+		}
+		if ($db_user->isAdmin && !$db_user->isActivated) {
+			$db_user->isActivated = true;
+		}
+		R::store($db_user);
+		return true;
+	}
+	return false;
+}
+
 function hash_password($pw) {
 	return md5($pw);
+}
+
+// Depicts the rights of the user-roles. Root can change everything, admin can change activated-status of non-admins.
+function hasRightToChange($parameter, $targetUser) {
+	global $user_flags;
+	if (isRootLoggedIn()) return true;
+	if (!isAdminLoggedIn()) return false;
+	if ($targetUser->isAdmin && !isRootLoggedIn()) return false;
+	return !$user_flags[$parameter];
 }
 
 ?>

@@ -6,12 +6,12 @@ assertLoggedOut();
 $registrationStatusRedirects = array(
 	'ok' => 'registered',
 	'usernameExists' => 'register?usernameExists',
-	'passwords' => 'register?passwordsDontMatch'
+	'passwords' => 'register?passwordsDontMatch',
+	'empty' => 'register?empty',
+	'illegalUsername' => 'register?illegalUsername'
 );
 
 list($username, $password, $password2) = assert_query_data(array('username', 'password1', 'password2'));
-$res = $registrationStatusRedirects[createUser($username, $password, $password2)];
-
-redirect($res);
+redirect($registrationStatusRedirects[createUser($username, $password, $password2)]);
 
 ?>

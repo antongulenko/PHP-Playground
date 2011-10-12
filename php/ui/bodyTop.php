@@ -1,11 +1,14 @@
-<? require_once 'php/session.php' ?>
+<?
+require_once 'php/session.php';
+require_once 'php/ui/util.php';
+?>
 
 <html>
 	<head>
 		<title>Bros ' r ' Us</title>
 		<link rel="shortcut icon" type="image/x-icon" href="/favicon_big.ico">
-		<script language="javascript" type="text/javascript" src="js/skip_tabcycle_links.js" ></script>
-		<link href="style/main.css" rel="stylesheet" type="text/css">
+		<? includeJs('js/skip_tabcycle_links.js') ?>
+		<? includeCss('style/main.css') ?>
 	</head>
 	<body>
 		<div id="header">
