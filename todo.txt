@@ -1,9 +1,7 @@
 
 admin-user-management:
-- delete-link
 - reset-password-link
 account-management:
-- change password
 - delete account
 
 Forum integrieren

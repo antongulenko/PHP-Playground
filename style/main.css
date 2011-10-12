@@ -154,17 +154,19 @@ body {
 	border-style: solid;
 	border-width: 2px;
 }
-.error-box  {
+.error-box {
 	border-color: E85A5A;
 	background-color: FAD2D2;
 }
-.error-box span {
+.error-box * {
+	color: E85A5A;
+}
+.error-box span, .content-box span {
 	position: relative;
 	left: 168px;
 	top: -12px;
 	font-size: large;
 	font-weight: bold;
-	color: E85A5A;
 }
 
 .simple_form  {

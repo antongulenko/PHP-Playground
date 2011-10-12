@@ -15,14 +15,14 @@ includeJs(array(
 ));
 includeCss('js/DataTables-1.8.2/media/css/demo_table.css');
 
-function headerRow() {
-	tableHeaderRow(array('User name', 'Activated', 'Admin', 'Root', 'Last Login'));
+function userHeaderRow() {
+	tableHeaderRow(array('User name', 'Activated', 'Admin', 'Root', 'Last Login', 'Delete account', 'Reset password'));
 }
 ?>
 
 <form method="GET" action="admin_users_save_changes">
 <table id="users_table" cellpadding="0" cellspacing="0" border="0" class="display" >
-<thead><? headerRow() ?></thead>
+<thead><? userHeaderRow() ?></thead>
 <?
 $editableValues = array('isActivated', 'isAdmin', 'isRoot');
 foreach (allUsers() as $user) {
@@ -35,10 +35,12 @@ foreach (allUsers() as $user) {
 				(hasRightToChange($parameter, $user) ? '' : 'READONLY '). '/>';
 	}
 	$columns[] = $user->lastLogin;
+	$columns[] = hasRightToAlter($user) ? render_link('Delete', 'delete_user?user='.$user->username) : '';
+	$columns[] = hasRightToAlter($user) ? render_link('Reset password', 'reset_password?user='.$user->username) : '';
 	tableRow($columns);
 }
 ?>
-<tfoot><? headerRow() ?></tfoot>
+<tfoot><? userHeaderRow() ?></tfoot>
 </table>
 <input value="Save changes" type="submit"/ >
 </form>

@@ -9,6 +9,8 @@ $(document).ready(function() {
 					{ "sSortDataType": "dom-checkbox" }, // isActivated
 					{ "sSortDataType": "dom-checkbox" }, // isAdmin
 					{ "sSortDataType": "dom-checkbox" }, // isRoot
-					{ "sType": "date-euro" } // Last Login
+					{ "sType": "date-euro" }, // Last Login
+					null, // Delete
+					null // Reset password
 				]});
 });

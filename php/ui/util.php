@@ -24,17 +24,24 @@ function includeCss($cssScriptS) {
 // $error_messages can contain key-value-string or just strings.
 // If a string (key) exists as parameter, an error-box will be rendered.
 // The error-message is the value in the array (if it contains values) or the value of the request-parameter.
-// This will open two <div>-element, which must be closed.
-function openBox($error_messages) {
+// This will open two <div>-element, which must be closed (closeBox())
+// As string as parameter renders the string as error unconditionally
+function openBox($error_messages, $no_error = false) {
 	if (isset($error_messages)) {
-		$isNumbered = isNumbered($error_messages);
-		$parameters = $isNumbered ? $error_messages : array_keys($error_messages);
-		$parameter = firstExistingParameter($parameters);
+		if (is_string($error_messages)) {
+			$isNumbered = false;
+			$error_messages = array($error_messages);
+			$parameter = 0;
+		} else {
+			$isNumbered = isNumbered($error_messages);
+			$parameters = $isNumbered ? $error_messages : array_keys($error_messages);
+			$parameter = firstExistingParameter($parameters);
+		}
 	}
 	?>
 	<div class="box-container">
-	<div class="<? echo isset($parameter) ? 'error-box' : 'content-box' ?>"><?
-	if (isset($parameter)) { 
+	<div class="<? echo (!$no_error && isset($parameter)) ? 'error-box' : 'content-box' ?>"><?
+	if (isset($parameter) || $no_error) {
 		$message = $isNumbered ? $_REQUEST[$parameter] : $error_messages[$parameter]; ?>
 		<span><? echo $message ?></span><?
 	}
@@ -56,7 +63,7 @@ function simpleForm($specs, $method, $action) {
 	foreach ($specs as $spec) {
 		$submit = strcasecmp($spec[0], 'submit') == 0; ?>
 		<label for="<? echo $spec[2] ?>"><? echo ($submit ? ' ' : $spec[1]) ?></label>
-		<input tabindex="<? echo $tabindex++ ?>" 
+		<input required tabindex="<? echo $tabindex++ ?>" 
 			<? if ($submit) echo "value='$spec[1]'" ?> type="<? echo $spec[0] ?>" name="<? echo $spec[2] ?>" />
 		<br/>
 		<?
@@ -80,6 +87,14 @@ function tableHeaderRow($dataArray) {
 
 function tableRow($dataArray) {
 	namedTableRow($dataArray, 'td');
+}
+
+function render_link($caption, $target) {
+	return '<a href="'. $target. '">'. $caption. '</a>';
+}
+
+function renderBackLink($caption) {
+	return '<a ONCLICK="history.go(-1)" >'. $caption. '</a>';
 }
 
 ?>

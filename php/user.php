@@ -37,6 +37,15 @@ function login($user, $password) {
 	return 'ok';
 }
 
+function changeUserPassword($oldPassword, $newPassword1, $newPassword2) {
+	if (hash_password($oldPassword) !== currentUser()->password) return 'failed';
+	if ($newPassword1 !== $newPassword2) return 'dontMatch';
+	if (empty($newPassword1)) return 'empty';
+	currentUser()->password = hash_password($newPassword1);
+	R::store(currentUser());
+	return 'ok';
+}
+
 function currentDatabaseSession() {
 	return R::findOne('session', 'ip = ?', array(ip()));
 }
@@ -61,6 +70,15 @@ function logout() {
 
 function allUSers() {
 	return R::find('user');
+}
+
+function deleteUser($userOrName) {
+	if (is_string($userOrName)) {
+		$userOrName = findUser($userOrName);
+	}
+	if (isset($userOrName) && $userOrName !== false) {
+		R::trash($userOrName);
+	}
 }
 
 // Dangerous function for the first user in the system :)
@@ -142,9 +160,13 @@ function updateUserFlags($username, $newData) {
 		foreach (array_keys($user_flags) as $attribute) {
 			if (hasRightToChange($attribute, $db_user)) {
 				$newValue = array_key_exists($attribute, $newData) && $newData[$attribute] === true;
-				if ($db_user->$attribute !== $newValue)
+				if ($db_user->$attribute != $newValue) {
 					// Only set changed attributes... Dunno, how the orm reacts.
 					$db_user->$attribute = $newValue;
+					
+					echo 'set '. $attribute. ' of '. $db_user->username;
+					var_dump($newValue);
+				}
 			}
 		}
 		// Make adjustments to keep the flags consistent and logical
@@ -154,6 +176,10 @@ function updateUserFlags($username, $newData) {
 		if ($db_user->isAdmin && !$db_user->isActivated) {
 			$db_user->isActivated = true;
 		}
+		
+		if ($username !== 'Anton') ;
+			// exit();
+		
 		R::store($db_user);
 		return true;
 	}
@@ -169,8 +195,25 @@ function hasRightToChange($parameter, $targetUser) {
 	global $user_flags;
 	if (isRootLoggedIn()) return true;
 	if (!isAdminLoggedIn()) return false;
-	if ($targetUser->isAdmin && !isRootLoggedIn()) return false;
+	if ($targetUser->isAdmin) return false;
 	return !$user_flags[$parameter];
+}
+
+// Combines the right to delete and to reset the password
+function hasRightToAlter($user) {
+	if (isRootLoggedIn()) return true;
+	if (!isAdminLoggedIn()) currentUser() === $user; // Can alter himself
+	if ($user->isAdmin) return false;
+	return true;
+}
+
+function assertAlterableUser($username) {
+	assertLoggedIn();
+	$user = findUser($username);
+	if ($user === false || !hasRightToAlter($user)) {
+		kill();
+	}
+	return $user;
 }
 
 ?>
