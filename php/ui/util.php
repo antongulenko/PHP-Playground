@@ -88,11 +88,14 @@ function _simpleForm($target, $targetQuery, $content) {
 }
 
 function _input($type, $label, $key) {
+	static $firstElement = true;
 	static $tabIndex = 1;
 	if (isset($label)) { ?>
 		<label for="<? echo $key ?>"><? executeDomContent($label) ?></label>
 	<? } ?>
-	<input REQUIRED tabindex="<? echo $tabIndex++ ?>" type="<? echo $type ?>" name="<? echo $key ?>" />
+	<input 
+	<? if ($firstElement) { $firstElement = false; echo 'autofocus="autofocus"'; } ?>
+	REQUIRED tabindex="<? echo $tabIndex++ ?>" type="<? echo $type ?>" name="<? echo $key ?>" />
 	<?
 }
 
