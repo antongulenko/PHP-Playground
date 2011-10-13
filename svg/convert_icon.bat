@@ -1,1 +1,1 @@
-png2ico ..\favicon.ico icon.png
+png2ico ..\favicon.ico woody3_best.png
