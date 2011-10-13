@@ -4,16 +4,26 @@ require_once 'php/user.php';
 require_once 'php/ui/util.php';
 assertLoggedOut();
 
-openBox(array(
-	'failed' => 'Login failed, wrong username or password.',
-	'notActivated' => 'Your account has not yet been activated.'
+if (queried('perform_login')) {
+	list($username, $password) = assertQueryData(array('username', 'password'));
+	conditionalRedirect(login($username, $password),
+		array(
+			'ok' => 'index',
+			'failed' => 'login?failed',
+			'notActivated' => 'login?notActivated' ));
+}
+
+_errorBoxes(array(
+	'failed' => 'Login fehlgeschlagen, falscher Username oder Passwort',
+	'notActivated' => 'Dein Account wurde noch nicht aktiviert'
 ));
-simpleForm(array(
-	array('text', 'Username:', 'username'),
-	array('password', 'Passwort:', 'password'),
-	array('submit', 'Login', ''),
-), 'GET', 'perform_login');
-closeBox();
+_box('Login', function() {
+	_simpleForm('login', 'perform_login', function() {
+		_textInput('Username:', 'username'); _br();
+		_passwordInput('Passwort:', 'password'); _br();
+		_submit('Login');
+	});
+});
 
 require 'php/ui/bodyBottom.php'
 ?>

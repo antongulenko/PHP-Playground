@@ -1,20 +1,38 @@
 <?
 require_once 'php/util.php';
 
+/* ===================================================================
+ * Setup
+ * ===================================================================
+ */
+
 session_cache_expire(60 * 5); // 5 minutes
 session_start();
 
-// String to be appended to a link to keep a session intact, if cookies are not used
-function session_parameter() {
-	return htmlspecialchars(SID);
+/* ===================================================================
+ * Session Management
+ * ===================================================================
+ */
+
+// Global session-object-singleton
+$Session = Session::instance();
+// Function to avoid using the global-keywork everywhere
+function session() {
+	global $Session;
+	return $Session;
 }
 
 // Transparently transforms the link to keep the session intact, if cookies are not used
 function session_link($link) {
 	if (SID == "" || isExternalLink($link))
 		return $link;
-	return $link . (strpos($link, "?") ? "&amp;" : "?") . session_parameter();
+	return $link . (strpos($link, "?") ? "&amp;" : "?") . htmlspecialchars(SID);
 }
+
+/* ===================================================================
+ * Classes
+ * ===================================================================
+ */
 
 class Session {
 	
@@ -91,13 +109,6 @@ class SessionValue {
 		unset($_SESSION[$this->key]);
 	}
 	
-}
-
-$Session = Session::instance();
-// Function to avoid using the global-keywork everywhere
-function session() {
-	global $Session;
-	return $Session;
 }
 
 // Example of using this Session-API

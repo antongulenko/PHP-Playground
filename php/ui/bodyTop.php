@@ -1,7 +1,4 @@
-<?
-require_once 'php/session.php';
-require_once 'php/ui/util.php';
-?>
+<? require_once 'php/ui/util.php' ?>
 
 <html>
 	<head>
@@ -15,11 +12,11 @@ require_once 'php/ui/util.php';
 			<div id="header-content">
 				<img id="logo" src="style/background.png" alt="(Logo)" />
 				<h1>Hallo, Leute!</h1>
-				<div id="loginStatus"><? include 'loggedInHeader.php' ?></div>
+				<div id="loginStatus"><? require 'php/ui/loggedInHeader.php' ?></div>
 			</div>
 		</div>
 		<div id="menu">
-			<? include 'menu.php' ?>
+			<? require 'php/ui/menu.php' ?>
 		</div>
 		
 		<div id="main-container">

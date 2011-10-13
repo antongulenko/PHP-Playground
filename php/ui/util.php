@@ -1,11 +1,11 @@
 <?
 require_once 'php/util.php';
 
-function menu_element($text, $link, $isSelected) { 
-	?><a <? 
-	if ($isSelected) { ?>class="selected" <? } ?>
-	href="<? echo session_link($link) ?>"><? echo $text ?></a><?
-}
+/* 
+ * ===================================================================
+ * Include Scripts
+ * ===================================================================
+ */
 
 function includeJs($scriptNameS) {
 	if (!is_array($scriptNameS)) $scriptNameS = array($scriptNameS);
@@ -21,80 +21,222 @@ function includeCss($cssScriptS) {
 	}
 }
 
-// $error_messages can contain key-value-string or just strings.
-// If a string (key) exists as parameter, an error-box will be rendered.
-// The error-message is the value in the array (if it contains values) or the value of the request-parameter.
-// This will open two <div>-element, which must be closed (closeBox())
-// As string as parameter renders the string as error unconditionally
-function openBox($error_messages, $no_error = false) {
-	if (isset($error_messages)) {
-		if (is_string($error_messages)) {
-			$isNumbered = false;
-			$error_messages = array($error_messages);
-			$parameter = 0;
-		} else {
-			$isNumbered = isNumbered($error_messages);
-			$parameters = $isNumbered ? $error_messages : array_keys($error_messages);
-			$parameter = firstExistingParameter($parameters);
+/* 
+ * ===================================================================
+ * Special functions
+ * ===================================================================
+ */
+
+function menu_element($text, $link, $isSelected) { 
+	?><a <? 
+	if ($isSelected) { ?>class="selected" <? } ?>
+	href="<? echo session_link($link) ?>"><? echo $text ?></a><?
+}
+
+/* 
+ * ===================================================================
+ * Rendering DOM-elements: Simple & Forms
+ * ===================================================================
+ */
+
+function _h1($content) {
+	?><h1><? executeDomContent($content) ?></h1><?
+}
+
+function _h2($content) {
+	?><h2><? executeDomContent($content) ?></h2><?
+}
+
+function _h3($content) {
+	?><h3><? executeDomContent($content) ?></h3><?
+}
+
+function _br() {
+	?><br/><?
+}
+
+function _span($content) {
+	?><span><? executeDomContent($content) ?></span><?
+}
+
+function _link($caption, $target, $classes = null) {
+	?><a <? printClasses($classes) ?> href="<? echo $target ?>"><? echo $caption ?></a><?
+}
+
+function _backLink($caption, $classes = null) {
+	?><a <? printClasses($classes) ?> onclick="history.go(-1)"><? echo $caption ?></a><?
+}
+
+function _navigationLink($caption, $target, $classes = array()) {
+	array_push($classes, 'navigation-link');
+	_link($caption, $target, $classes);
+}
+
+// $targetQuery will be a hidden form-query-key, so that the same page can
+// contain the form and work the form result.
+function _form($target, $targetQuery, $content, $classes = null) {
+	?><form <? printClasses($classes) ?> method="POST" action="<? echo $target ?>"><?
+	executeDomContent($content);
+	if (isset($targetQuery)) {
+		_input('hidden', null, $targetQuery);
+	}
+	?></form><?
+}
+
+function _simpleForm($target, $targetQuery, $content) {
+	_form($target, $targetQuery, $content, array('simple-form'));
+}
+
+function _input($type, $label, $key) {
+	static $tabIndex = 1;
+	if (isset($label)) { ?>
+		<label for="<? echo $key ?>"><? executeDomContent($label) ?></label>
+	<? } ?>
+	<input REQUIRED tabindex="<? echo $tabIndex++ ?>" type="<? echo $type ?>" name="<? echo $key ?>" />
+	<?
+}
+
+function _textInput($label, $key) {
+	_input('text', $label, $key);
+}
+
+function _passwordInput($label, $key) {
+	_input('password', $label, $key);
+}
+
+function _submit($content) {
+	static $button_count = 0;
+	$id = 'submit_button_'. $button_count;
+	_centered(function() use($content, $id) {
+		_br();
+		?>
+		<!-- label for="<? echo $id ?>"></label -->
+		<input id="<? echo $id ?>" name="<? echo $id ?>" class="navigation-link"
+		type="submit" value="<? executeDomContent($content) ?>" />
+		<?
+	});
+}
+
+function _centered($content) {
+	?><div class="centered"><?
+	executeDomContent($content);
+	?></div><?
+}
+
+function _checkbox($name, $defaultChecked, $changeable) {
+	?><input type="checkbox" name="<? echo $name ?>"
+		<? if ($defaultChecked) { ?>CHECKED <? } ?>
+		<? if (!$changeable) { ?>READONLY <? } ?>
+	/><?
+}
+
+/* 
+ * ===================================================================
+ * Rendering DOM-elements: Table
+ * ===================================================================
+ */
+
+function _table($headers, $content) {
+	?>
+	<table id="users_table" cellpadding="0" cellspacing="0" border="0" class="display">
+		<thead><? _headerRow($headers) ?></thead>
+		<? executeDomContent($content); ?>
+		<tfoot><? _headerRow($headers) ?></tfoot>
+	</table>
+	<?
+}
+
+function _rows($allElements, $renderer) {
+	foreach($allElements as $element) {
+		_row(function() use ($element, $renderer) { $renderer($element); });
+	}
+}
+
+function _row($content) {
+	?><tr><? executeDomContent($content) ?></tr><?
+}
+
+function _headerRow($elements) {
+	_row(function() use ($elements) {
+		foreach ($elements as $element) {
+			_namedCell('th', $element);
+		}
+	});
+}
+
+function _namedCell($cellType, $content, $visible = true) {
+	if ($visible) {
+		?><<? echo $cellType ?>><? executeDomContent($content) ?></<? echo $cellType ?>><?
+	}
+}
+
+function _cell($content, $visible = true) {
+	_namedCell('td', $content, $visible);
+}
+
+/* 
+ * ===================================================================
+ * Rendering DOM-elements: Boxes
+ * ===================================================================
+ */
+
+function _box($headerText = null, $content = null, $error = false) {
+	?><div class="box-container">
+	<div class="<? echo $error ? 'error-box' : 'content-box' ?>">
+		<? if (isset($headerText)) _h3($headerText); ?>
+		<div class="box-content">
+		<? executeDomContent($content); ?>
+	</div></div></div><?
+}
+
+function _boxes($messages, $error = false) {
+	foreach ($messages as $key => $message) {
+		if (queried($key)) {
+			_box($message, null, $error);
+			_br();
 		}
 	}
-	?>
-	<div class="box-container">
-	<div class="<? echo (!$no_error && isset($parameter)) ? 'error-box' : 'content-box' ?>"><?
-	if (isset($parameter) || $no_error) {
-		$message = $isNumbered ? $_REQUEST[$parameter] : $error_messages[$parameter]; ?>
-		<span><? echo $message ?></span><?
+}
+
+function _errorBoxes($messages) {
+	_boxes($messages, true);
+}
+
+function _areYouSureBox($question, $noText, $okText, $target) {
+	_box($question, function() use ($noText, $okText, $target) {
+		_centered(function() use($noText, $okText, $target) {
+			_backLink($noText, array('navigation-link'));
+			_br();
+			_br();
+			_navigationLink($okText, $target);
+		});
+	});
+}
+
+/* 
+ * ===================================================================
+ * Private Functions
+ * ===================================================================
+ */
+
+function executeDomContent($element) {
+	if (!isset($element)) return;
+	if (is_string($element)) {
+		echo $element;
+	} else if (is_callable($element)) {
+		$element();
+	} else {
+		echo 'DOM-RENDERING-ERROR, cannot render. Dumping.';
+		var_dump($element);
 	}
 }
 
-function closeBox() {
-	?>
-	</div>
-	</div>
-	<?
-}
-
-// array of arrays of the form array('type', 'label', 'name')
-function simpleForm($specs, $method, $action) {
-	$tabindex = 1;
-	?>
-	<form class="simple_form" method="<? echo $method ?>" action="<? echo $action ?>" >
-	<?
-	foreach ($specs as $spec) {
-		$submit = strcasecmp($spec[0], 'submit') == 0; ?>
-		<label for="<? echo $spec[2] ?>"><? echo ($submit ? ' ' : $spec[1]) ?></label>
-		<input required tabindex="<? echo $tabindex++ ?>" 
-			<? if ($submit) echo "value='$spec[1]'" ?> type="<? echo $spec[0] ?>" name="<? echo $spec[2] ?>" />
-		<br/>
-		<?
+function printClasses($classes) {
+	if (isset($classes)) {
+		echo 'class="';
+		foreach ($classes as $classname) {
+			echo "$classname ";
+		}
+		echo '" ';
 	}
-	?>
-	</form>
-	<?
 }
-
-function namedTableRow($dataArray, $cellType) {
-	?><tr><?
-	foreach ($dataArray as $cell) {
-		?><<? echo $cellType ?>><? echo $cell ?></<? echo $cellType ?>><?
-	}
-	?></tr><?
-}
-
-function tableHeaderRow($dataArray) {
-	namedTableRow($dataArray, 'th');
-}
-
-function tableRow($dataArray) {
-	namedTableRow($dataArray, 'td');
-}
-
-function render_link($caption, $target) {
-	return '<a href="'. $target. '">'. $caption. '</a>';
-}
-
-function renderBackLink($caption) {
-	return '<a ONCLICK="history.go(-1)" >'. $caption. '</a>';
-}
-
-?>

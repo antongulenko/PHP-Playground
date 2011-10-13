@@ -1,9 +1,9 @@
 <?
 require 'php/ui/bodyTop.php';
 require_once 'php/user.php';
-assertLoggedIn();
+assertLoggedOut();
 
-_h1('Hier kommt das Forum hin.');
+_box('Dein Account wurde gelöscht');
 
 require 'php/ui/bodyBottom.php';
 ?>

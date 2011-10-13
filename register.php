@@ -4,19 +4,31 @@ require_once 'php/user.php';
 require_once 'php/ui/util.php';
 assertLoggedOut();
 
-openBox(array(
-	'usernameExists' => 'The chosen username already exists',
-	'passwordsDontMatch' => 'The passwords don\'t match',
+if (queried('perform_registration')) {
+	list($username, $password, $password2) = assertQueryData(array('username', 'password1', 'password2'));
+	conditionalRedirect(createUser($username, $password, $password2),
+		array(
+			'ok' => 'message_registered',
+			'usernameExists' => 'register?usernameExists',
+			'passwords' => 'register?passwordsDontMatch',
+			'empty' => 'register?empty',
+			'illegalUsername' => 'register?illegalUsername'));
+}
+
+_errorBoxes(array(
+	'usernameExists' => 'Der gewählte Username existiert bereits',
+	'passwordsDontMatch' => 'Die Passwörter stimmen nicht überein',
 	'empty' => 'Bitte fülle alle Felder aus',
-	'illegalUsername' => 'Im Usernamen sind nur alphanumerische Zeichen und _ erlaubt'
+	'illegalUsername' => 'Im Username sind nur alphanumerische Zeichen und _ erlaubt'
 ));
-simpleForm(array(
-	array('text', 'Username:', 'username'),
-	array('password', 'Passwort:', 'password1'),
-	array('password', 'Passwort wiederholen:', 'password2'),
-	array('submit', 'Create Account', ''),
-), 'GET', 'perform_registration');
-closeBox();
+_box('Registrieren', function() {
+	_simpleForm('register', 'perform_registration', function() {
+		_textInput('Username:', 'username'); _br();
+		_passwordInput('Passwort:', 'password1'); _br();
+		_passwordInput('Passwort wiederholen:', 'password2'); _br();
+		_submit('Registrieren');
+	});
+});
 
 require 'php/ui/bodyBottom.php'
 ?>

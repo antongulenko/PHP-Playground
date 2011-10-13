@@ -3,6 +3,12 @@ require_once 'php/session.php';
 require_once 'php/orm.php';
 require_once 'php/util.php';
 
+/* 
+ * ===================================================================
+ * Session Related Setup
+ * ===================================================================
+ */
+
 // Synchronize the logged-in-status between database and Session
 // The Session is used to expire the login, the database contains the actual status
 $db_session = currentDatabaseSession();
@@ -18,6 +24,12 @@ if ($db_session === false || !$client_session->is_set()) {
 	}
 }
 
+/* 
+ * ===================================================================
+ * User Session Management
+ * ===================================================================
+ */
+
 // If the credentials are correct, login the user. Return a string-status depicting the success.
 function login($user, $password) {
 	$user = findUser($user, $password);
@@ -31,12 +43,53 @@ function login($user, $password) {
 	if ($db_session === false) {
 		$db_session = R::dispense('session');
 	}
-	$db_session->ip = ip();
+	$db_session->ip = requestIp();
 	$db_session->username = $user->username;
 	R::store($db_session);
 	return 'ok';
 }
 
+function logout() {
+	deleteDatabaseSession();
+	unset(session()->isLoggedIn);
+	$loggedInUser = null;
+}
+
+function currentUser() {
+	global $loggedInUser;
+	return $loggedInUser;
+}
+
+function isLoggedIn() {
+	return currentUser() !== null;
+}
+
+function isAdminLoggedIn() {
+	return isLoggedIn() && currentUser()->isAdmin;
+}
+
+function isRootLoggedIn() {
+	return isLoggedIn() && currentUser()->isRoot;
+}
+
+function assertLoggedOut() {
+	if (isLoggedIn()) kill();
+}
+
+function assertLoggedIn() {
+	if (!isLoggedIn()) kill();
+}
+
+function assertAdminLoggedIn() {
+	if (!isAdminLoggedIn()) kill();
+}
+
+/* 
+ * ===================================================================
+ * User Data Management
+ * ===================================================================
+ */
+ 
 function changeUserPassword($oldPassword, $newPassword1, $newPassword2) {
 	if (hash_password($oldPassword) !== currentUser()->password) return 'failed';
 	if ($newPassword1 !== $newPassword2) return 'dontMatch';
@@ -46,30 +99,34 @@ function changeUserPassword($oldPassword, $newPassword1, $newPassword2) {
 	return 'ok';
 }
 
-function currentDatabaseSession() {
-	return R::findOne('session', 'ip = ?', array(ip()));
+function deleteCurrentUser() {
+	if (!isLoggedIn()) return;
+	deleteUser(currentUser());
+	logout();
 }
 
-function deleteDatabaseSession() {
-	$db_session = currentDatabaseSession();
-	if ($db_session !== false) {
-		R::trash($db_session);
-	}
-}
+/* 
+ * ===================================================================
+ * User Data Administration
+ * ===================================================================
+ */
 
-function currentUser() {
-	global $loggedInUser;
-	return $loggedInUser;
-}
-
-function logout() {
-	deleteDatabaseSession();
-	unset(session()->isLoggedIn);
-	$loggedInUser = null;
-}
-
-function allUSers() {
-	return R::find('user');
+// Return a string-status depiciting the success of the registration
+function createUser($username, $password, $password2) {
+	if ($password != $password2) return 'passwords';
+	if (empty($password) && empty($username)) return 'empty';
+	preg_match('/^([A-Za-z0-9]|_)*$/',$username, $matches);
+	if (empty($matches)) return 'illegalUsername';
+	$existingUser = findUser($username);
+	if ($existingUser !== false) return 'usernameExists';
+	$user = R::dispense('user');
+	$user->username = $username;
+	$user->password = hash_password($password);
+	$user->isAdmin = false;
+	$user->isActivated = false;
+	$user->isRoot = false;
+	R::store($user);
+	return 'ok';
 }
 
 function deleteUser($userOrName) {
@@ -93,63 +150,6 @@ function makeRoot($username) {
 	}
 	return false;
 }
-
-function isLoggedIn() {
-	return currentUser() !== null;
-}
-
-function isAdminLoggedIn() {
-	return isLoggedIn() && currentUser()->isAdmin == true;
-}
-
-function isRootLoggedIn() {
-	return isLoggedIn() && currentUser()->isRoot == true;
-}
-
-function assertLoggedOut() {
-	if (isLoggedIn()) kill();
-}
-
-function assertLoggedIn() {
-	if (!isLoggedIn()) kill();
-}
-
-function assertAdminLoggedIn() {
-	if (!isAdminLoggedIn()) kill();
-}
-
-function findUser($username, $password = null) {
-	if (isset($password)) {
-		return R::findOne('user', 'username = ? AND password = ?', array($username, hash_password($password)));
-	} else {
-		return R::findOne('user', 'username = ?', array($username));
-	}
-}
-
-// Return a string-status depiciting the success of the registration
-function createUser($username, $password, $password2) {
-	if ($password != $password2) return 'passwords';
-	if (empty($password) && empty($username)) return 'empty';
-	preg_match('/^([A-Za-z0-9]|_)*$/',$username, $matches);
-	if (empty($matches)) return 'illegalUsername';
-	$existingUser = findUser($username, $password);
-	if ($existingUser !== false) return 'usernameExists';
-	$user = R::dispense('user');
-	$user->username = $username;
-	$user->password = hash_password($password);
-	$user->isAdmin = false;
-	$user->isActivated = false;
-	$user->isRoot = false;
-	R::store($user);
-	return 'ok';
-}
-
-// This contains the flags of user-data and whether root is required to change it.
-$user_flags = array(
-	'isRoot' => true,
-	'isAdmin' => true,
-	'isActivated' => false
-);
 
 // Update changeable settings of the specified user. Return success state.
 // Only handles boolean attributes (flags)
@@ -186,9 +186,44 @@ function updateUserFlags($username, $newData) {
 	return false;
 }
 
-function hash_password($pw) {
-	return md5($pw);
+function resetUserPassword($user) {
+	if (!hasRightToAlter($user)) return;
+	$new_pw = preg_replace('/([ ])/e', 'chr(rand(97,122))', '       '); // 7 characters
+	$user->password = hash_password($new_pw);
+	R::store($user);
+	return $new_pw;
 }
+
+/* 
+ * ===================================================================
+ * User Query Functions
+ * ===================================================================
+ */
+
+function allUsers() {
+	return R::find('user');
+}
+
+function findUser($username, $password = null) {
+	if (isset($password)) {
+		return R::findOne('user', 'username = ? AND password = ?', array($username, hash_password($password)));
+	} else {
+		return R::findOne('user', 'username = ?', array($username));
+	}
+}
+
+/* 
+ * ===================================================================
+ * User Rights
+ * ===================================================================
+ */
+
+// This contains the flags of user-data and whether root is required to change it.
+$user_flags = array(
+	'isRoot' => true,
+	'isAdmin' => true,
+	'isActivated' => false
+);
 
 // Depicts the rights of the user-roles. Root can change everything, admin can change activated-status of non-admins.
 function hasRightToChange($parameter, $targetUser) {
@@ -214,6 +249,27 @@ function assertAlterableUser($username) {
 		kill();
 	}
 	return $user;
+}
+
+/* 
+ * ===================================================================
+ * Private Functions
+ * ===================================================================
+ */
+
+function hash_password($pw) {
+	return md5($pw);
+}
+ 
+function currentDatabaseSession() {
+	return R::findOne('session', 'ip = ?', array(requestIp()));
+}
+ 
+function deleteDatabaseSession() {
+	$db_session = currentDatabaseSession();
+	if ($db_session !== false) {
+		R::trash($db_session);
+	}
 }
 
 ?>

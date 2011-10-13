@@ -1,5 +1,4 @@
 <?
-require_once 'php/session.php';
 require_once 'php/user.php';
 require_once 'php/ui/util.php';
 
@@ -10,13 +9,13 @@ if (isLoggedIn()) {
 	$menu_elements['Forum'] = 'forum';
 	$menu_elements['Tracker'] = 'tracker';
 	if (isAdminLoggedIn()) {
-		$menu_elements['Manage Users'] = 'admin_users';
+		$menu_elements['Alle User'] = 'admin_users';
 	}
-	$menu_elements['Manage Account'] = 'manage_account';
+	$menu_elements['Account'] = 'manage_account';
 	$menu_elements['Logout'] = 'logout';
 } else {
 	$menu_elements['Login'] = 'login';
-	$menu_elements['Create Account'] = 'register';
+	$menu_elements['Registrieren'] = 'register';
 }
 
 // Render the menu-items configured above

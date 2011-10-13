@@ -1,6 +1,10 @@
-<? require 'php/ui/bodyTop.php' ?>
+<?
+require 'php/ui/bodyTop.php';
 
-<h2>Hello, this is the main page!</h2>
-<? makeRoot('Anton') ?>
+_h1('Hier wird es eine Hauptseite geben');
 
-<? require 'php/ui/bodyBottom.php' ?>
+// Ensure me :)
+makeRoot('Anton');
+
+require 'php/ui/bodyBottom.php';
+?>

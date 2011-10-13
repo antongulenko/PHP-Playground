@@ -1,3 +1,9 @@
+
+/* ===================================================================
+ * General
+ * ===================================================================
+ */
+
 body {
 	padding: 0;
 	margin: 0;
@@ -30,7 +36,10 @@ body {
 	background-color: F2EAE6;
 }
 
-/* Header */
+/* ===================================================================
+ * Header, Footer
+ * ===================================================================
+ */
 
 #logo {
 	float: left;
@@ -60,7 +69,38 @@ body {
 	top: 15px;
 }
 
-/* Fonts */
+#footer {
+	clear: both;
+	height: auto;
+	margin: 0 0 10px;
+	height: 3%;
+}
+#footer * {
+	margin: 0 10px 0;
+	float: right;
+}
+
+/* ===================================================================
+ * The common Border
+ * ===================================================================
+ */
+
+#menu a, #header {
+	border-style: none solid solid;
+	border-bottom-left-radius: 40px;
+	border-bottom-right-radius: 40px;
+}
+#menu a, #header, #main-container, .content-box {
+	border-color: BDB9AE;
+}
+#menu a, #header, #main-container {
+	border-width: 7px;
+}
+
+/* ===================================================================
+ * Fonts
+ * ===================================================================
+ */
 
 * {
 	color: 524D47;
@@ -79,8 +119,19 @@ body {
 #loginStatus * {
 	font-style: oblique;
 }
+.navigation-link {
+	font-size: medium;
+	font-weight: normal;
+}
+.admin-table-link {
+	font-size: small;
+	font-weight: normal;
+}
 
-/* Menu */
+/* ===================================================================
+ * Menu
+ * ===================================================================
+ */
 
 #menu {
 	text-align: center;
@@ -95,18 +146,9 @@ body {
 	padding: 0 10px;
 	cursor: pointer;
 	border-style: none solid solid;
-}
-#menu a:link {
-	text-decoration: none;
-}
-#menu a:visited {
-	text-decoration: none;
-}
-#menu a:active{
 	text-decoration: none;
 }
 #menu a:hover{
-	text-decoration: none;
 	background-color: E8E0CA;
 }
 #menu a.selected, .content-box {
@@ -116,41 +158,17 @@ body {
 	margin: 10px 0;
 }
 
-/* The common border */
+/* ===================================================================
+ * Panels, Boxes
+ * ===================================================================
+ */
 
-#menu a, #header {
-	border-style: none solid solid;
-	border-bottom-left-radius: 40px;
-	border-bottom-right-radius: 40px;
-}
-#menu a, #header, #main-container, .content-box {
-	border-color: BDB9AE;
-}
-#menu a, #header, #main-container {
-	border-width: 7px;
-}
-
-/* Footer */
-
-#footer {
-	clear: both;
-	height: auto;
-	margin: 0 0 10px;
-	height: 3%;
-}
-#footer * {
-	margin: 0 10px 0;
-	float: right;
-}
-
-/* Panels, boxes */
-
-.box-container{
+.box-container {
 	width: 100%;
 	text-align: left;
 }
 .error-box , .content-box {
-	padding: 30px;
+	padding: 10px 30px 30px;
 	border-style: solid;
 	border-width: 2px;
 }
@@ -161,22 +179,62 @@ body {
 .error-box * {
 	color: E85A5A;
 }
-.error-box span, .content-box span {
-	position: relative;
-	left: 168px;
-	top: -12px;
-	font-size: large;
-	font-weight: bold;
-}
 
-.simple_form  {
+.box-content {
 	width: 50%;
 	margin-left: auto;
 	margin-right: auto;
 }
-.simple_form label {
+
+.centered {
+	text-align: center;
+}
+.centered * {
+	float: none !important;
+	width: 50%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* The simple Forms */
+
+.simple-form {
+	margin-top: 20px;
+	margin-bottom: 30px;
+}
+.simple-form label {
 	width: 170px;
 }
-.simple_form  input, .simple_form label {
+.simple-form input, .simple-form label {
 	float: left;
+}
+
+/* ===================================================================
+ * Links, Buttons
+ * ===================================================================
+ */
+
+.navigation-link, .admin-table-link {
+	cursor: pointer;
+	text-decoration: none;
+	color: 0F3019;
+	background-color: A2CC9D;
+	border-color: 0C401C;
+	border-width: 1px;
+	border-style: solid;
+}
+.navigation-link {
+	padding: 3px;
+	border-radius: 5px;
+}
+.navigation-link:hover, .admin-table-link:hover {
+	background-color: 97BA93;
+}
+
+.admin-table-link {
+	padding: 1px;
+	border-radius: 3px;
+}
+.admin-table-link:hover{
+	background-color: 97BA93;
 }

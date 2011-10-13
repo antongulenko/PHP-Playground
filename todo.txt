@@ -1,11 +1,18 @@
 
-admin-user-management:
-- reset-password-link
-account-management:
-- delete account
+layout innterhalb der boxes:
+ - Inhalte richtig zentrieren, bzw aussuchen ob zentriert oder an einer stelle alignt
+ - Submit-buttons cooler platziert, mittig unter dem form
+
+ 
+ 
 
 Forum integrieren
 Tracker integrieren
 
 (Guter text für startseite)
 (notiz hinterlassen beim account erstellen)
+
+Design:
+Admin tabelle an rest angleichen
+alles mit braun + dunkelgrün anreichern
+woody-kopf im logo, logo mit passenden farben 
