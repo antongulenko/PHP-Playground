@@ -3,7 +3,7 @@ require 'php/ui/bodyTop.php';
 require_once 'php/user.php';
 assertLoggedIn();
 
-_h1('Hier kommt das Forum hin.');
+_iframe("php/bbpress/index.php");
 
 require 'php/ui/bodyBottom.php';
 ?>

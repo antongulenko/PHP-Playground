@@ -33,6 +33,15 @@ function menu_element($text, $link, $isSelected) {
 	href="<? echo session_link($link) ?>"><? echo $text ?></a><?
 }
 
+function _iframe($target, $name = "iframe", $altName = null) {
+	if (!isset($altName)) $altName = $name;
+	?>
+	<iframe src="<? echo $target ?>" scrolling="yes" name="<? echo $name ?>">
+		<h3><? echo $altName ?> should be here, you cannot display iframes.</h3>
+	</iframe>
+	<?
+}
+
 /* 
  * ===================================================================
  * Rendering DOM-elements: Simple & Forms

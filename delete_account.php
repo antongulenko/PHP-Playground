@@ -5,7 +5,7 @@ assertLoggedIn();
 
 if (queried('really')) {
 	deleteCurrentUser();
-	redirect('message_account_deleted');
+	redirect('message_deleted');
 } else {
 	_areYouSureBox(
 		'Willst Du wirklich Deinen Account löschen?',
